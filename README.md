@@ -2,8 +2,8 @@
 ## First of all you've to setup this variables in a .env file:
 #### CLIENT_ID, CLIENT_SECRET, SPOTIPY_REDIRECT_URL, DATABASE_LOCATION
 
-Technologies used on this project:
-## Python & SQL
+## Technologies used on this project:
+### Python & SQL
 
 ## Documentation & How to Use: 
                   [How to Use Spotipy](https://spotipy.readthedocs.io/en/2.22.1/)
