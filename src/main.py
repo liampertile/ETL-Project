@@ -45,7 +45,8 @@ def transform(raw_data , date):
         )
     
     df = pd.DataFrame(data)
-    clean_df = df[pd.to_datetime(df["played_at"]).dt.date == date.date()]
+    # clean_df = df[pd.to_datetime(df["played_at"]).dt.date == date.date()]
+    # uncomment, in case you want the songs played specifically in this day!
     
     #validation
     
@@ -55,7 +56,7 @@ def transform(raw_data , date):
     if df.isnull().values.any():
         raise Exception("the data is corrupt, a value in df is null")
     
-    return clean_df
+    return df
     
 def load(df):
     
@@ -83,7 +84,7 @@ def load(df):
 
 if __name__ == "__main__":
     
-    date = datetime.today() - timedelta(days=1)
+    date = datetime.today() - timedelta(days=50) #put days=1 if you want specifically this day
     
     #extract
     data_raw = extract(date)
@@ -93,6 +94,6 @@ if __name__ == "__main__":
     clean_df = transform(data_raw,date)
     print(f"{clean_df.shape[0]} regs after transform")
     
-    # #load
-    # load(clean_df)
-    # print("work done")
+    #load
+    load(clean_df)
+    print("work done")
