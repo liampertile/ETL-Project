@@ -1,4 +1,4 @@
-Antes que nada, para usarlo debes crear un archivo .env con los siguientes datos:
+First of all, you've to setup this variables in a .env file:
 
 CLIENT_ID = 
 CLIENT_SECRET = 
