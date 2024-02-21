@@ -1,24 +1,25 @@
-from decouple import Config
+from decouple import config
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import pandas as pd
 import sqlite3
-import datetime
 import sqlalchemy
-import timedelta
+from datetime import datetime, timedelta
+
 
 scope = "user-read-recently-played"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
     
-    client_id = Config('CLIENT_ID')
-    ,client_secret = Config('CLIENT_SECRET')
-    ,redirect_uri = Config('SPOTIPY_REDIRECT_URI')
+    client_id = config('CLIENT_ID')
+    ,client_secret = config('CLIENT_SECRET')
+    ,redirect_uri = config('SPOTIPY_REDIRECT_URI')
     ,scope = scope
     
 ))
 
-def extract(date, limit = 30):
+
+def extract(date, limit = 50):
     """
    
     datetime (ds) -> date to query 
@@ -28,9 +29,8 @@ def extract(date, limit = 30):
     
     ds = int(date.timestamp()) * 1000 # that's because spotipy uses unix format
     
-    return sp.current_user_recently_played(limit = limit , after = ds)
+    return sp.current_user_recently_played(limit=limit, after=ds)
 
-    pass
     
 def transform(raw_data , date):
     data = []
@@ -45,7 +45,6 @@ def transform(raw_data , date):
         )
     
     df = pd.DataFrame(data)
-    
     clean_df = df[pd.to_datetime(df["played_at"]).dt.date == date.date()]
     
     #validation
@@ -59,10 +58,32 @@ def transform(raw_data , date):
     return clean_df
     
 def load(df):
-    pass
+    
+    engine = sqlalchemy.create_engine(config('DATABASE_LOCATION'))
+    conn = sqlite3.connect("played_songs")
+    cursor = conn.cursor()  
+    
+    query = """
+    CREATE TABLE IF NOT EXISTS played_tracks(
+        song_name VARCHAR(100),
+        artist_name VARCHAR(100),
+        played_at VARCHAR(100),
+        timestamp VARCHAR(100),
+        CONSTRAINT primary_key_constraint PRIMARY KEY (played_at)
+    )
+    """
+    cursor.execute(query)
+    
+    try:
+        df.to_sql("played_songs" , engine , index = False , if_exists = 'append' )
+    except:
+        print("already exist in the db")
+    
+    
 
 if __name__ == "__main__":
-    date = datetime.today() - timedelta(days = 1)
+    
+    date = datetime.today() - timedelta(days=1)
     
     #extract
     data_raw = extract(date)
@@ -72,3 +93,6 @@ if __name__ == "__main__":
     clean_df = transform(data_raw,date)
     print(f"{clean_df.shape[0]} regs after transform")
     
+    # #load
+    # load(clean_df)
+    # print("work done")
