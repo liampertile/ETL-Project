@@ -14,3 +14,5 @@
 - [How to Use Spotipy](https://spotipy.readthedocs.io/en/2.22.1/)
 - [How to Use SQLAlchemy](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)
 - [How to Setup `.env` variables](https://simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html)
+
+![Spotify Logo](path/to/spotify_logo.png)
