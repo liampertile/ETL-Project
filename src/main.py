@@ -88,7 +88,7 @@ if __name__ == "__main__":
     
     #extract
     data_raw = extract(date)
-    print(f"Extracted {len(data_raw["items"])} registers")
+    print(f"Extracted {len(data_raw['items'])} registers")
     
     #transform
     clean_df = transform(data_raw,date)
